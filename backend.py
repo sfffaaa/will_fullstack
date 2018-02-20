@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 
 from flask import Flask, abort, request
@@ -20,18 +20,18 @@ def create_will():
     num_signature = int(request.form.get('num_sig'))
     raw_data = request.form.get('raw_data')
 
-    my_private_key = utils.GenerateRandomPrivateKey()
-    private_keys = [utils.GenerateRandomPrivateKey() for _ in range(num_signature)]
+    my_private_key = utils.GenerateRandomPrivateKeyInBytes()
+    private_keys = [utils.GenerateRandomPrivateKeyInBytes() for _ in range(num_signature)]
 
     encrypt_data = str(raw_data)
     for _ in [my_private_key] + private_keys:
-        encrypt_data = aes_utils.AESEncrypt(my_private_key.decode('hex'), encrypt_data)
+        encrypt_data = aes_utils.AESEncrypt(my_private_key, encrypt_data)
 
     # Write down data to ethereum block
 
     return json.dumps({
-        'my_private_key': my_private_key,
-        'others_private_key': dict(zip(range(num_signature), private_keys)),
+        'my_private_key': my_private_key.hex(),
+        'others_private_key': dict(zip(range(num_signature), [_.hex() for _ in private_keys])),
         'encrypt_data': encrypt_data
     })
 
