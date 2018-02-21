@@ -31,7 +31,7 @@ def _DeploySmartContract(contract_path, file_ipc):
     w3.miner.start(1)
     retry_time = 0
     while not tx_receipt and retry_time < 10:
-        print('wait for miner!')
+        print('    wait for miner!')
         time.sleep(5)
         tx_receipt = w3.eth.getTransactionReceipt(tx_hash)
         retry_time += 1
@@ -40,10 +40,10 @@ def _DeploySmartContract(contract_path, file_ipc):
     if not tx_receipt:
         raise IOError('still cannot get contract result')
 
-    return tx_receipt
+    return tx_receipt, w3.eth.accounts[0]
 
 
-def _DumpContractInfo(contract_path, contract_detail, file_path):
+def _DumpContractInfo(contract_path, contract_detail, contract_owner, file_path):
     file_path = os.path.abspath(file_path)
     dir_path = os.path.dirname(file_path)
     if not os.path.isdir(dir_path):
@@ -52,6 +52,7 @@ def _DumpContractInfo(contract_path, contract_detail, file_path):
     json_data = {
         'abi': _GetBuildContractJsonFileAttribute(contract_path, 'abi'),
         'address': contract_detail['contractAddress'],
+        'owner': contract_owner,
         'detail': {k: v for k, v in contract_detail.items()}
     }
     with open(file_path, 'w') as f:
@@ -69,14 +70,17 @@ if __name__ == '__main__':
     assert os.path.isfile(contract_path), 'file path {0} doesn\'t exist'.format(contract_path)
 
     print('==== Deploy contract to private chain  ====')
-    contract_detail = _DeploySmartContract(contract_path,
-                                           config.get('Ethereum', 'file_ipc'))
+    contract_detail, contract_owner = _DeploySmartContract(contract_path,
+                                                           config.get('Ethereum', 'file_ipc'))
 
     _DumpContractInfo(contract_path,
                       contract_detail,
+                      contract_owner,
                       config.get('Output', 'file_path'))
 
     print('==== Deploy finished ====')
     print('Contract detail:')
     for k, v in contract_detail.items():
         print('    {0}: {1}'.format(k, v))
+    print('Contract owner:')
+    print('    owner: {0}'.format(contract_owner))
