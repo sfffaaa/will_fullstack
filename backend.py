@@ -46,7 +46,8 @@ def update_will():
 
 @app.route("/will/delete", methods=['POST'])
 def delete_will():
-    abort(400)
+    my_private_key = request.form.get('my_private_key')
+    onchain_utils.DeleteWillToOnchain(myeth_utils.PrivToAddr(my_private_key))
     return 'OK'
 
 
@@ -54,6 +55,11 @@ def delete_will():
 def retrieve_will():
     my_private_key = request.form.get('my_private_key')
     encrypt_data = onchain_utils.RetrieveWillToOnchain(myeth_utils.PrivToAddr(my_private_key))
+
+    if not encrypt_data:
+        return json.dumps({
+            'raw_data': ''
+        })
 
     other_private_keys_dict = json.loads(request.form.get('others_private_key'))
 

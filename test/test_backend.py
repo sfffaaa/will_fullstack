@@ -40,3 +40,18 @@ retrieve_resp = json.loads(r.text)
 assert RAW_DATA == retrieve_resp['raw_data']
 
 print(retrieve_resp)
+
+# test delete
+delete_data = {
+    'my_private_key': create_resp['my_private_key'],
+}
+r = requests.post('http://localhost:31313/will/delete', data=delete_data)
+assert 'OK' == r.text
+
+retrieve_data = {
+    'my_private_key': create_resp['my_private_key'],
+    'others_private_key': json.dumps(create_resp['others_private_key'])
+}
+r = requests.post('http://localhost:31313/will/retrieve', data=retrieve_data)
+retrieve_resp = json.loads(r.text)
+assert '' == retrieve_resp['raw_data']
