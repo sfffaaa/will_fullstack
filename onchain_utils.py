@@ -10,6 +10,7 @@ import os
 import time
 
 CONFIG_PATH = 'etc/config.conf'
+MINER_WAIT_TIME = 3
 
 
 def _GetChainConfig(section, key):
@@ -36,10 +37,10 @@ def CreateWillToOnchain(public_key, encrypt_data):
     contract_abi = contract_info['abi']
     contract_address = contract_info['address']
 
-    contract_inst = w3.eth.contract(contract_abi,
-                                    contract_address,
+    contract_inst = w3.eth.contract(contract_address,
+                                    abi=contract_abi,
                                     ContractFactoryClass=ConciseContract)
-    tx_hash = contract_inst.Create(public_key, "aaabbb",
+    tx_hash = contract_inst.Create(public_key, encrypt_data,
                                    transact={'from': w3.eth.accounts[0]})
 
     tx_receipt = w3.eth.getTransactionReceipt(tx_hash)
@@ -47,15 +48,33 @@ def CreateWillToOnchain(public_key, encrypt_data):
     retry_time = 0
     while not tx_receipt and retry_time < 10:
         print('    wait for miner!')
-        time.sleep(2)
+        time.sleep(MINER_WAIT_TIME)
         tx_receipt = w3.eth.getTransactionReceipt(tx_hash)
         retry_time += 1
 
+    w3.miner.stop()
     if not tx_receipt:
         raise IOError('still cannot get contract result')
 
     print(tx_receipt)
     print('==== CreateWillToOnchain finish ====')
+
+
+def RetrieveWillToOnchain(public_key):
+    print('==== RetrieveWillToOnchain start ====')
+
+    file_ipc = _GetChainConfig('Ethereum', 'file_ipc')
+    w3 = Web3(Web3.IPCProvider(file_ipc))
+
+    contract_info = _GetContractInfo()
+    contract_abi = contract_info['abi']
+    contract_address = contract_info['address']
+    contract_inst = w3.eth.contract(contract_address,
+                                    abi=contract_abi,
+                                    ContractFactoryClass=ConciseContract)
+    retrieve_data = contract_inst.Retrieve(public_key)
+    print('==== RetrieveWillToOnchain finish ====')
+    return retrieve_data
 
 
 if __name__ == '__main__':

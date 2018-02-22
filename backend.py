@@ -25,10 +25,9 @@ def create_will():
     private_keys = [myeth_utils.GenerateRandomPrivateKeyInBytes() for _ in range(num_signature)]
 
     encrypt_data = str(raw_data)
-    for _ in [my_private_key] + private_keys:
-        encrypt_data = aes_utils.AESEncrypt(my_private_key, encrypt_data)
+    for enc_private_key in private_keys:
+        encrypt_data = aes_utils.AESEncrypt(enc_private_key, encrypt_data)
 
-    # Write down data to ethereum block
     onchain_utils.CreateWillToOnchain(myeth_utils.PrivToAddr(my_private_key),
                                       encrypt_data)
 
@@ -53,8 +52,20 @@ def delete_will():
 
 @app.route("/will/retrieve", methods=['POST'])
 def retrieve_will():
-    abort(400)
-    return 'OK'
+    my_private_key = request.form.get('my_private_key')
+    encrypt_data = onchain_utils.RetrieveWillToOnchain(myeth_utils.PrivToAddr(my_private_key))
+
+    other_private_keys_dict = json.loads(request.form.get('others_private_key'))
+
+    other_private_keys = myeth_utils.SortedPrivateKeys(other_private_keys_dict)
+    other_private_keys = [bytes.fromhex(_) for _ in other_private_keys]
+
+    for decrypt_private_key in other_private_keys:
+        encrypt_data = aes_utils.AESDecrypt(decrypt_private_key, encrypt_data)
+
+    return json.dumps({
+        'raw_data': encrypt_data
+    })
 
 
 if __name__ == "__main__":
