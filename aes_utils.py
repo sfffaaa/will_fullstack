@@ -43,6 +43,8 @@ if __name__ == '__main__':
     print(len(key))
     raw = 'Yoyoyo test for me!!!'
     enc_data = AESEncrypt(key, raw)
+    enc_data = AESEncrypt(key, enc_data)
     dec_data = AESDecrypt(key, enc_data)
+    dec_data = AESDecrypt(key, dec_data)
     assert dec_data == raw
     print('dec success "{0}"'.format(raw))
