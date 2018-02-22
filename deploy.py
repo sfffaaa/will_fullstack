@@ -32,7 +32,7 @@ def _DeploySmartContract(contract_path, file_ipc):
     retry_time = 0
     while not tx_receipt and retry_time < 10:
         print('    wait for miner!')
-        time.sleep(5)
+        time.sleep(2)
         tx_receipt = w3.eth.getTransactionReceipt(tx_hash)
         retry_time += 1
 

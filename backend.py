@@ -2,8 +2,9 @@
 # encoding: utf-8
 
 from flask import Flask, abort, request
-import utils
+import myeth_utils
 import aes_utils
+import onchain_utils
 import json
 
 app = Flask(__name__)
@@ -20,14 +21,16 @@ def create_will():
     num_signature = int(request.form.get('num_sig'))
     raw_data = request.form.get('raw_data')
 
-    my_private_key = utils.GenerateRandomPrivateKeyInBytes()
-    private_keys = [utils.GenerateRandomPrivateKeyInBytes() for _ in range(num_signature)]
+    my_private_key = myeth_utils.GenerateRandomPrivateKeyInBytes()
+    private_keys = [myeth_utils.GenerateRandomPrivateKeyInBytes() for _ in range(num_signature)]
 
     encrypt_data = str(raw_data)
     for _ in [my_private_key] + private_keys:
         encrypt_data = aes_utils.AESEncrypt(my_private_key, encrypt_data)
 
     # Write down data to ethereum block
+    onchain_utils.CreateWillToOnchain(myeth_utils.PrivToAddr(my_private_key),
+                                      encrypt_data)
 
     return json.dumps({
         'my_private_key': my_private_key.hex(),
@@ -55,4 +58,4 @@ def retrieve_will():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=30303, debug=True)
+    app.run(host='0.0.0.0', port=31313, debug=True)
