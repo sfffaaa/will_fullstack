@@ -2,9 +2,9 @@
 # encoding: utf-8
 
 from flask import Flask, abort, request
-import myeth_utils
-import aes_utils
-import onchain_utils
+from utils import myeth_utils
+from utils import aes_utils
+from utils import onchain_utils
 import json
 
 app = Flask(__name__)
