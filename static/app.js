@@ -15,20 +15,20 @@ $("document").ready(function() {
                 '#create-resp'
             ]
         },
-        "select": {
+        "retrieve": {
             "loading-items": [
-                '#select-loading-space',
-                '#select-loading-icon'
+                '#retrieve-loading-space',
+                '#retrieve-loading-icon'
             ],
             "form-items": [
-                '#select-private-key',
-                '.select-other-keys',
-                '#select-add-private-key-btn',
-                '#select-del-private-key-btn',
-                '#select-btn'
+                '#retrieve-private-key',
+                '.retrieve-other-keys',
+                '#retrieve-add-private-key-btn',
+                '#retrieve-del-private-key-btn',
+                '#retrieve-btn'
             ],
             'result-items': [
-                '#select-resp'
+                '#retrieve-resp'
             ]
         }
     };
@@ -62,7 +62,8 @@ $("document").ready(function() {
 
     HideValAllItem(allItems.create['loading-items'], true);
     HideValAllItem(allItems.create['result-items'], true);
-    HideValAllItem(allItems.select['loading-items'], true);
+    HideValAllItem(allItems.retrieve['loading-items'], true);
+    HideValAllItem(allItems.retrieve['result-items'], true);
 
     $("#create-form").submit(function(e) {
         e.preventDefault();
@@ -89,28 +90,28 @@ $("document").ready(function() {
         });
     });
 
-    $(document).on('click', '#select-add-private-key-btn', function(e) {
+    $(document).on('click', '#retrieve-add-private-key-btn', function(e) {
         e.preventDefault();
 
         var controlForm = $(this).parents('.form-group');
-        var currentEntry = $(this).parents('.select-private-entry:first').clone();
+        var currentEntry = $(this).parents('.retrieve-private-entry:first').clone();
         var newEntry = $(currentEntry.clone()).appendTo(controlForm);
 
         newEntry.find('input').val('');
-        controlForm.find('.select-private-entry:not(:last) .btn-add')
+        controlForm.find('.retrieve-private-entry:not(:last) .btn-add')
             .removeClass('btn-add').addClass('btn-remove')
             .removeClass('btn-success').addClass('btn-danger')
-            .attr('id', 'select-del-private-key-btn')
+            .attr('id', 'retrieve-del-private-key-btn')
             .html('<div class="fa fa-minus"></div>');
 
-    }).on('click', '#select-del-private-key-btn', function(e) {
+    }).on('click', '#retrieve-del-private-key-btn', function(e) {
         e.preventDefault();
-        $(this).parents('.select-private-entry:first').remove();
+        $(this).parents('.retrieve-private-entry:first').remove();
     });
     var ComposeSelectOtherPrivateKeys = function() {
         var otherPrivateKeysDict = {};
         var idx = 0;
-        $(".select-private-entry").each(function() {
+        $(".retrieve-private-entry").each(function() {
             otherPrivateKeysDict[idx] = $(this).find(".form-control").val();
             idx++;
         });
@@ -118,15 +119,16 @@ $("document").ready(function() {
     };
 
     var UpdateRetrieveResp = function(resp) {
-        $('#select-raw-data').text(resp.raw_data);
+        $('#retrieve-raw-data').text(resp.raw_data);
+        HideValAllItem(allItems.retrieve['result-items'], false);
     };
 
-    $("#select-form").submit(function(e) {
+    $("#retrieve-form").submit(function(e) {
         e.preventDefault();
-        DisableValAllItem(allItems.select['form-items'], true);
-        HideValAllItem(allItems.select['loading-items'], false);
+        DisableValAllItem(allItems.retrieve['form-items'], true);
+        HideValAllItem(allItems.retrieve['loading-items'], false);
 
-        var my_private_key = $("#select-private-key").val();
+        var my_private_key = $("#retrieve-private-key").val();
         var others_private_key = ComposeSelectOtherPrivateKeys();
 
         $.post("will/retrieve", {
@@ -139,8 +141,8 @@ $("document").ready(function() {
                 return;
             }
             UpdateRetrieveResp(resp);
-            DisableValAllItem(allItems.select['form-items'], false);
-            HideValAllItem(allItems.select['loading-items'], true);
+            DisableValAllItem(allItems.retrieve['form-items'], false);
+            HideValAllItem(allItems.retrieve['loading-items'], true);
         });
     });
 });

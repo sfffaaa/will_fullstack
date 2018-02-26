@@ -24,7 +24,7 @@
 		    <a class="nav-link" id="will-delete-tab" data-toggle="tab" href="#will-delete" role="tab" aria-controls="will-delete" aria-selected="true">Delete</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link" id="will-select-tab" data-toggle="tab" href="#will-select" role="tab" aria-controls="will-select" aria-selected="true">Select</a>
+		    <a class="nav-link" id="will-retrieve-tab" data-toggle="tab" href="#will-retrieve" role="tab" aria-controls="will-retrieve" aria-selected="true">Select</a>
 		  </li>
 		  <li class="nav-item">
 		    <a class="nav-link" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="false">About</a>
@@ -67,30 +67,30 @@
 		  <div class="tab-pane fade col-lg-6" id="will-delete" role="tabpanel" aria-labelledby="will-delete-tab">
         bbb
       </div>
-		  <div class="tab-pane fade col-lg-6" id="will-select" role="tabpanel" aria-labelledby="will-select-tab">
-				<form id="select-form" role="form" action="#">
+		  <div class="tab-pane fade col-lg-6" id="will-retrieve" role="tabpanel" aria-labelledby="will-retrieve-tab">
+				<form id="retrieve-form" role="form" action="#">
 				  <div class="form-group">
-				    <label for="select-private-key">My private Key:</label>
-  			    <input type="text" class="form-control" name="select-private-key" id="select-private-key" placeholder="Enter your private key">
+				    <label for="retrieve-private-key">My private Key:</label>
+  			    <input type="text" class="form-control" name="retrieve-private-key" id="retrieve-private-key" placeholder="Enter your private key">
 				  </div>
 				  <div class="form-group">
-				    <label for="select-other-keys">Other private key</label>
-            <div class="input-group select-private-entry">
-              <input type="text" class="form-control select-other-keys" placeholder="Type private keys for your witness">
+				    <label for="retrieve-other-keys">Other private key</label>
+            <div class="input-group retrieve-private-entry">
+              <input type="text" class="form-control retrieve-other-keys" placeholder="Type private keys for your witness">
               <div class="input-group-btn">
-                <button class="btn btn-success btn-add" type="button" id="select-add-private-key-btn">
+                <button class="btn btn-success btn-add" type="button" id="retrieve-add-private-key-btn">
                   <div class="fa fa-plus"></div>
                 </button>
               </div>
             </div>
           </div>
-				  <button type="submit" class="btn btn-primary" id="select-btn">Submit</button>
-					<a id="select-loading-space">&nbsp;&nbsp;&nbsp;</a>
-				  <a id="select-loading-icon" class="fa fa-spinner fa-spin"></a>
+				  <button type="submit" class="btn btn-primary" id="retrieve-btn">Submit</button>
+					<a id="retrieve-loading-space">&nbsp;&nbsp;&nbsp;</a>
+				  <a id="retrieve-loading-icon" class="fa fa-spinner fa-spin"></a>
 				</form>
-        <div id="select-resp">
+        <div id="retrieve-resp">
           <hr>
-          <div><a><strong>Raw data: </strong></a><a id="select-raw-data"> - </a></div>
+          <div><a><strong>Raw data: </strong></a><a id="retrieve-raw-data"> - </a></div>
         </div>
       </div>
 		  <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab">
