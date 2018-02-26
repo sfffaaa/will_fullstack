@@ -28,6 +28,23 @@ $("document").ready(function() {
                 '#delete-resp'
             ]
         },
+        "update": {
+            "loading-items": [
+                '#update-loading-space',
+                '#update-loading-icon'
+            ],
+            "form-items": [
+                '#update-raw-data',
+                '#update-private-key',
+                '.update-other-keys',
+                '#update-add-private-key-btn',
+                '#update-del-private-key-btn',
+                '#update-btn'
+            ],
+            'result-items': [
+                '#update-resp'
+            ]
+        },
         "retrieve": {
             "loading-items": [
                 '#retrieve-loading-space',
@@ -79,6 +96,8 @@ $("document").ready(function() {
     HideValAllItem(allItems.delete['result-items'], true);
     HideValAllItem(allItems.retrieve['loading-items'], true);
     HideValAllItem(allItems.retrieve['result-items'], true);
+    HideValAllItem(allItems.update['loading-items'], true);
+    HideValAllItem(allItems.update['result-items'], true);
 
     $("#create-form").submit(function(e) {
         e.preventDefault();
@@ -185,6 +204,65 @@ $("document").ready(function() {
             UpdateDeleteResp(resp);
             DisableValAllItem(allItems.delete['form-items'], false);
             HideValAllItem(allItems.delete['loading-items'], true);
+        });
+    });
+
+
+    $(document).on('click', '#update-add-private-key-btn', function(e) {
+        e.preventDefault();
+
+        var controlForm = $(this).parents('.form-group');
+        var currentEntry = $(this).parents('.update-private-entry:first').clone();
+        var newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+        newEntry.find('input').val('');
+        controlForm.find('.update-private-entry:not(:last) .btn-add')
+            .removeClass('btn-add').addClass('btn-remove')
+            .removeClass('btn-success').addClass('btn-danger')
+            .attr('id', 'update-del-private-key-btn')
+            .html('<div class="fa fa-minus"></div>');
+
+    }).on('click', '#update-del-private-key-btn', function(e) {
+        e.preventDefault();
+        $(this).parents('.update-private-entry:first').remove();
+    });
+    var ComposeUpdateOtherPrivateKeys = function() {
+        var otherPrivateKeysDict = {};
+        var idx = 0;
+        $(".update-private-entry").each(function() {
+            otherPrivateKeysDict[idx] = $(this).find(".form-control").val();
+            idx++;
+        });
+        return otherPrivateKeysDict;
+    };
+
+    var UpdateUpdateResp = function(resp) {
+        $('#update-status').text('OK');
+        HideValAllItem(allItems.update['result-items'], false);
+    };
+
+    $("#update-form").submit(function(e) {
+        e.preventDefault();
+        DisableValAllItem(allItems.update['form-items'], true);
+        HideValAllItem(allItems.update['loading-items'], false);
+
+        var raw_data = $("#update-raw-data").val();
+        var my_private_key = $("#update-private-key").val();
+        var others_private_key = ComposeUpdateOtherPrivateKeys();
+
+        $.post("will/update", {
+            'raw_data': raw_data,
+            "my_private_key": my_private_key,
+            "others_private_key": JSON.stringify(others_private_key)
+        }).done(function(data) {
+            var resp = jQuery.parseJSON(data);
+            if (!resp.success) {
+                console.log(resp);
+                return;
+            }
+            UpdateUpdateResp(resp);
+            DisableValAllItem(allItems.update['form-items'], false);
+            HideValAllItem(allItems.update['loading-items'], true);
         });
     });
 });

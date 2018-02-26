@@ -62,7 +62,34 @@
         </div>
 			</div>
 		  <div class="tab-pane fade col-lg-6" id="will-update" role="tabpanel" aria-labelledby="will-update-tab">
-        aaa
+ 				<form id="update-form" role="form" action="#">
+				  <div class="form-group">
+				    <label for="update-raw-data">Raw data:</label>
+  			    <input type="text" class="form-control" name="update-raw-data" id="update-raw-data" placeholder="Enter your new will">
+				  </div>
+				  <div class="form-group">
+				    <label for="update-private-key">My private Key:</label>
+  			    <input type="text" class="form-control" name="update-private-key" id="update-private-key" placeholder="Enter your private key">
+				  </div>
+				  <div class="form-group">
+				    <label for="update-other-keys">Other private key</label>
+            <div class="input-group update-private-entry">
+              <input type="text" class="form-control update-other-keys" placeholder="Type private keys for your witness">
+              <div class="input-group-btn">
+                <button class="btn btn-success btn-add" type="button" id="update-add-private-key-btn">
+                  <div class="fa fa-plus"></div>
+                </button>
+              </div>
+            </div>
+          </div>
+				  <button type="submit" class="btn btn-primary" id="update-btn">Submit</button>
+					<a id="update-loading-space">&nbsp;&nbsp;&nbsp;</a>
+				  <a id="update-loading-icon" class="fa fa-spinner fa-spin"></a>
+        </form>
+        <div id="update-resp">
+          <hr>
+          <div><a><strong>Status: </strong></a><a id="update-status"> - </a></div>
+        </div>
       </div>
 		  <div class="tab-pane fade col-lg-6" id="will-delete" role="tabpanel" aria-labelledby="will-delete-tab">
 				<form id="delete-form" role="form" action="#">

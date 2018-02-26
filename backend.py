@@ -48,7 +48,7 @@ def create_will():
 
 @app.route("/will/update", methods=['POST'])
 def update_will():
-    my_private_key = json.loads(flask.request.form.get('my_private_key'))
+    my_private_key = flask.request.form.get('my_private_key')
     raw_data = flask.request.form.get('raw_data')
     other_private_keys_dict = json.loads(flask.request.form.get('others_private_key'))
     other_private_keys = myeth_utils.SortedPrivateKeys(other_private_keys_dict, reverse=False)
@@ -62,6 +62,7 @@ def update_will():
                                       encrypt_data)
 
     return json.dumps({
+        'success': True,
         'my_private_key': my_private_key,
         'others_private_key': other_private_keys_dict,
         'encrypt_data': encrypt_data
