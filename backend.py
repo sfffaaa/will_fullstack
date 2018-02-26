@@ -73,7 +73,9 @@ def delete_will():
     # [TODO] Check request
     my_private_key = flask.request.form.get('my_private_key')
     onchain_utils.DeleteWillToOnchain(myeth_utils.PrivToAddr(my_private_key))
-    return 'OK'
+    return json.dumps({
+        'success': True
+    })
 
 
 @app.route("/will/retrieve", methods=['POST'])

@@ -15,6 +15,19 @@ $("document").ready(function() {
                 '#create-resp'
             ]
         },
+        "delete": {
+            "loading-items": [
+                '#delete-loading-space',
+                '#delete-loading-icon'
+            ],
+            "form-items": [
+                '#delete-private-key',
+                '#delete-btn'
+            ],
+            'result-items': [
+                '#delete-resp'
+            ]
+        },
         "retrieve": {
             "loading-items": [
                 '#retrieve-loading-space',
@@ -62,6 +75,8 @@ $("document").ready(function() {
 
     HideValAllItem(allItems.create['loading-items'], true);
     HideValAllItem(allItems.create['result-items'], true);
+    HideValAllItem(allItems.delete['loading-items'], true);
+    HideValAllItem(allItems.delete['result-items'], true);
     HideValAllItem(allItems.retrieve['loading-items'], true);
     HideValAllItem(allItems.retrieve['result-items'], true);
 
@@ -143,6 +158,33 @@ $("document").ready(function() {
             UpdateRetrieveResp(resp);
             DisableValAllItem(allItems.retrieve['form-items'], false);
             HideValAllItem(allItems.retrieve['loading-items'], true);
+        });
+    });
+
+
+    var UpdateDeleteResp = function(resp) {
+        $('#delete-status').text('OK');
+        HideValAllItem(allItems.delete['result-items'], false);
+    };
+
+    $("#delete-form").submit(function(e) {
+        e.preventDefault();
+        DisableValAllItem(allItems.delete['form-items'], true);
+        HideValAllItem(allItems.delete['loading-items'], false);
+
+        var my_private_key = $("#delete-private-key").val();
+
+        $.post("will/delete", {
+            "my_private_key": my_private_key
+        }).done(function(data) {
+            var resp = jQuery.parseJSON(data);
+            if (!resp.success) {
+                console.log(resp);
+                return;
+            }
+            UpdateDeleteResp(resp);
+            DisableValAllItem(allItems.delete['form-items'], false);
+            HideValAllItem(allItems.delete['loading-items'], true);
         });
     });
 });
