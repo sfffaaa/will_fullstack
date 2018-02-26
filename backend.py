@@ -84,6 +84,7 @@ def retrieve_will():
 
     if not encrypt_data:
         return json.dumps({
+            'success': True,
             'raw_data': ''
         })
 
@@ -96,6 +97,7 @@ def retrieve_will():
         encrypt_data = aes_utils.AESDecrypt(decrypt_private_key, encrypt_data)
 
     return json.dumps({
+        'success': True,
         'raw_data': encrypt_data
     })
 
