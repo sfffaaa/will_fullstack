@@ -134,8 +134,16 @@ def retrieve_will():
 
     other_private_keys = req_utils.ConvertOtherPrivateKeysStr(other_private_keys_dict)
 
-    for decrypt_private_key in other_private_keys:
-        encrypt_data = aes_utils.AESDecrypt(decrypt_private_key, encrypt_data)
+    try:
+        for decrypt_private_key in other_private_keys:
+            encrypt_data = aes_utils.AESDecrypt(decrypt_private_key, encrypt_data)
+    except Exception as e:
+        traceback.print_exc()
+        exc_tuple = sys.exc_info()
+        return json.dumps({
+            'success': False,
+            'error': str(exc_tuple[1]).strip()
+        })
 
     return json.dumps({
         'success': True,
