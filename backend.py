@@ -31,7 +31,7 @@ def create_will():
     raw_data = flask.request.form.get('raw_data')
     try:
         req_utils.CheckCreateInput(num_signature, raw_data)
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
         exc_tuple = sys.exc_info()
         return json.dumps({
@@ -66,7 +66,7 @@ def update_will():
     other_private_keys_dict = flask.request.form.get('others_private_key')
     try:
         req_utils.CheckUpdateInput(my_private_key, other_private_keys_dict, raw_data)
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
         exc_tuple = sys.exc_info()
         return json.dumps({
@@ -96,7 +96,7 @@ def delete_will():
     my_private_key = flask.request.form.get('my_private_key')
     try:
         req_utils.CheckDeleteInput(my_private_key)
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
         exc_tuple = sys.exc_info()
         return json.dumps({
@@ -137,7 +137,7 @@ def retrieve_will():
     try:
         for decrypt_private_key in other_private_keys:
             encrypt_data = aes_utils.AESDecrypt(decrypt_private_key, encrypt_data)
-    except Exception as e:
+    except Exception:
         traceback.print_exc()
         exc_tuple = sys.exc_info()
         return json.dumps({
